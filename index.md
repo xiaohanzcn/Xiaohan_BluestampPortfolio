@@ -9,7 +9,7 @@ You should comment out all portions of your portfolio that you have not complete
 
 | **Engineer** | **School** | **Area of Interest** | **Grade** |
 |:--:|:--:|:--:|:--:|
-| Xiaohan Z | Dougherty Valley High School | Electrical Engineering | Incoming Junior
+| Xiaohan Z | Dougherty Valley High School | Mechanical Engineering | Incoming Junior
 
 **Replace the BlueStamp logo below with an image of yourself and your completed project. Follow the guide [here](https://tomcam.github.io/least-github-pages/adding-images-github-pages-site.html) if you need help.**
 
@@ -53,6 +53,8 @@ For your first milestone, describe what your project is and how you plan to buil
 - Challenges you're facing and solving in your future milestones
 - What your plan is to complete your project
 
+My project is a gesture controlled robot, which is where a glove on one hand will be able to control a robot car using sensors that detect certains motions and sent accordingly to the robot via bluetooth. My plan to build this project is to first split into 3 different parts: the robot, the glove, and the last part will be any assembly of the parts together or final code. First, the robot is a car with 4 motors to turn the wheels accordingly and the amount of power that cause the car to change directions will be determined by a motordriver that they are wired to. The motordriver determines the amount of power (which comes from an installed battery pack) goes to which motor. This information about direction and power output comes from an Arduino UNO, a computer that acts as the decision processor that has code that will be able to determine 4 different directions (forward, backward, left, and right). The information of which direction the Arduino UNO should make the robot actually turn comes from a bluetooth module that recieves information from another one on the glove. Since this robot is controlled through the motion of my hand, a sensor on the glove detects an intended motion on my hand and is then processed by the code on an Arduno Nano that sends the information to the robot. So far I have been able to build the robot by soldering the wiring beween the motors and the motordriver and connecting it to an Arduino. I was also able to write basic code that allows the robot to move in the four directions, meaning the robot is able to function and move. I have faced several challenges with most of them summing up to the wheels turning in ways that I don't intend it to. This showed in the forms of either soldering wires on the motors incorrectly, connecting the wires incorrectly to the motordriver, and even my code with wrong instructions for each direction. Challenges I am facing and solving in future milestones include actually writing the code to connect the glove component to the robot component via bluetooth as I have had almost negligible experience coding with python and C++ and none at all in Arduino IDE, requiring me to learn how this new coding environment works. My plan to complete the project is to next work on the glove, installing an Arduino Nano, Inertial measurement unit, and bluetooth module to send information and connecting it all together. I also plan to code the glove to recognize motion for intended direction of the robot and send it as such. Later I plan to connect the 2 code and add finishing touches as well as modifications to complete my project.
+
 # Schematics 
 Here's where you'll put images of your schematics. [Tinkercad](https://www.tinkercad.com/blog/official-guide-to-tinkercad-circuits) and [Fritzing](https://fritzing.org/learning/) are both great resoruces to create professional schematic diagrams, though BSE recommends Tinkercad becuase it can be done easily and for free in the browser. 
 
@@ -60,16 +62,88 @@ Here's where you'll put images of your schematics. [Tinkercad](https://www.tinke
 Here's where you'll put your code. The syntax below places it into a block of code. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize it to your project needs. 
 
 ```c++
+int IN1 = 9;
+int IN2 = 8;
+int IN3 = 7;
+int IN4 = 6;
+int ENB = 10; //right motor
+int ENA = 5;  //left motor
+
+void forward(){ 
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+
+  digitalWrite(ENA, HIGH);
+  digitalWrite(ENB, HIGH);
+}
+
+
+void back(){ 
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+
+
+  digitalWrite(ENA, HIGH);
+  digitalWrite(ENB, HIGH);
+}
+
+void right(){ 
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+
+
+  digitalWrite(ENA, HIGH);
+  digitalWrite(ENB, HIGH);
+}
+
+void left(){
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+
+
+  digitalWrite(ENA, HIGH);
+  digitalWrite(ENB, HIGH);
+}
+
 void setup() {
+  pinMode(9, OUTPUT);
+  pinMode(8, OUTPUT);
+  pinMode(7, OUTPUT);
+  pinMode(6, OUTPUT);
+  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
+}
   // put your setup code here, to run once:
-  Serial.begin(9600);
-  Serial.println("Hello World!");
+
+void stopMotors(){
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
+  forward();
+  delay(1000);
+  back();
+  delay(1000);
+  left();
+  delay(1000);
+  right();
+  delay(1000);
+  while(1){
+    stopMotors();
+  }
 }
+
 ```
 
 # Bill of Materials
