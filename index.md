@@ -39,7 +39,9 @@ For your second milestone, explain what you've worked on since your previous mil
 - Technical details of what you've accomplished and how they contribute to the final goal
 - What has been surprising about the project so far
 - Previous challenges you faced that you overcame
-- What needs to be completed before your final milestone 
+- What needs to be completed before your final milestone
+
+Since my previous milestone, I have shifted my focus mainly on the glove component of my project. This involved an abunduance of wiring the Arduino Nano to the the IMU mpu6050, which is a sensor that detects and tracks motion, forces, and rotational changes. This sensor plays a key role in the project because it will sense the changes in motion as I move it (and the glove it's going to be on) in four different directions and then using the x, y, and z-axis to identify which direction is which. I have also edited the code so that it only identifies a certain direction is initialized once the change in the axises goes over a certain, reasonable amount so as to not make the the robot too sensitive when connected. 
 
 # First Milestone
 
