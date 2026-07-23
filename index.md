@@ -64,89 +64,440 @@ Here's where you'll put images of your schematics. [Tinkercad](https://www.tinke
 Here's where you'll put your code. The syntax below places it into a block of code. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize it to your project needs. 
 
 ```c++
+#include <BLEDevice.h>
+#include <BLEUtils.h>
+#include <BLEClient.h>
+
+
+#define SERVICE_UUID        "19B10000-E8F2-537E-4F6C-D104768A1214"
+#define CHARACTERISTIC_UUID "19B10001-E8F2-537E-4F6C-D104768A1214"
+
+
+// -------- L298N MOTOR PINS --------
+
 int IN1 = 9;
 int IN2 = 8;
 int IN3 = 7;
 int IN4 = 6;
-int ENB = 10; //right motor
-int ENA = 5;  //left motor
 
-void forward(){ 
+int ENA = 12;
+int ENB = 10;
+
+
+// -------- BLE VARIABLES --------
+
+BLEClient* client;
+BLERemoteCharacteristic* characteristic;
+
+bool connected = false;
+
+char lastCommand = 'S';
+
+
+// -------- MOTOR FUNCTIONS --------
+
+void forward() {
+
   digitalWrite(IN1, HIGH);
   digitalWrite(IN2, LOW);
+
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, HIGH);
 
-  digitalWrite(ENA, HIGH);
-  digitalWrite(ENB, HIGH);
 }
 
 
-void back(){ 
+void backward() {
+
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, HIGH);
+
   digitalWrite(IN3, HIGH);
   digitalWrite(IN4, LOW);
 
-
-  digitalWrite(ENA, HIGH);
-  digitalWrite(ENB, HIGH);
 }
 
-void right(){ 
-  digitalWrite(IN1, HIGH);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN3, HIGH);
-  digitalWrite(IN4, LOW);
 
+void left() {
 
-  digitalWrite(ENA, HIGH);
-  digitalWrite(ENB, HIGH);
-}
-
-void left(){
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, HIGH);
+
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, HIGH);
 
-
-  digitalWrite(ENA, HIGH);
-  digitalWrite(ENB, HIGH);
 }
+
+
+void right() {
+
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+
+}
+
+
+void stopMotors() {
+
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+
+}
+
+
+
+// -------- BLE RECEIVE --------
+
+void notifyCallback(
+  BLERemoteCharacteristic* characteristic,
+  uint8_t* data,
+  size_t length,
+  bool isNotify
+) {
+
+
+  if (length > 0) {
+
+
+    char command = (char)data[0];
+
+
+    if (command != lastCommand) {
+
+
+      lastCommand = command;
+
+
+      Serial.print("Command received: ");
+      Serial.println(command);
+
+
+
+      switch(command) {
+
+
+        case 'F':
+          forward();
+          break;
+
+
+        case 'B':
+          backward();
+          break;
+
+
+        case 'L':
+          left();
+          break;
+
+
+        case 'R':
+          right();
+          break;
+
+
+        case 'S':
+          stopMotors();
+          break;
+
+      }
+
+    }
+
+  }
+
+}
+
+
+
+// -------- SETUP --------
 
 void setup() {
-  pinMode(9, OUTPUT);
-  pinMode(8, OUTPUT);
-  pinMode(7, OUTPUT);
-  pinMode(6, OUTPUT);
+
+
+  Serial.begin(115200);
+
+
+  // Motor pins
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+
   pinMode(ENA, OUTPUT);
   pinMode(ENB, OUTPUT);
-}
-  // put your setup code here, to run once:
 
-void stopMotors(){
-  digitalWrite(IN1, LOW);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN3, LOW);
-  digitalWrite(IN4, LOW);
+
+  // Full speed
+  analogWrite(ENA, 255);
+  analogWrite(ENB, 255);
+
+
+  stopMotors();
+
+
+
+  Serial.println("Starting BLE");
+
+
+  BLEDevice::init("Nano Robot");
+
+
 }
+
+
+
+// -------- LOOP --------
 
 void loop() {
-  forward();
-  delay(1000);
-  back();
-  delay(1000);
-  left();
-  delay(1000);
-  right();
-  delay(1000);
-  while(1){
-    stopMotors();
+
+  if (!connected) {
+
+
+    Serial.println("Scanning...");
+
+
+    BLEScan* scan = BLEDevice::getScan();
+
+    scan->setActiveScan(true);
+
+
+    BLEScanResults results = scan->start(5);
+
+
+
+    for (int i = 0; i < results.getCount(); i++) {
+
+
+      BLEAdvertisedDevice device =
+      results.getDevice(i);
+
+
+
+      if (device.haveServiceUUID() &&
+          device.isAdvertisingService(
+            BLEUUID(SERVICE_UUID)
+          )) {
+
+
+        Serial.println("Found XIAO");
+
+
+        client = BLEDevice::createClient();
+
+
+
+        if (client->connect(&device)) {
+
+
+          Serial.println("Connected to XIAO");
+
+
+
+          BLERemoteService* service =
+          client->getService(
+            BLEUUID(SERVICE_UUID)
+          );
+
+
+
+          characteristic =
+          service->getCharacteristic(
+            BLEUUID(CHARACTERISTIC_UUID)
+          );
+
+
+
+          if (characteristic->canNotify()) {
+
+
+            characteristic->registerForNotify(
+              notifyCallback
+            );
+
+
+            Serial.println("Notifications enabled");
+
+
+          }
+
+
+          connected = true;
+
+
+        }
+
+      }
+
+    }
+
   }
+
+
+  delay(1000);
+
 }
 
 ```
+
+```c++
+#include <ArduinoBLE.h>
+#include <Wire.h>
+#include <LSM6DS3.h>
+
+
+// ---------------- IMU ----------------
+
+LSM6DS3 myIMU(I2C_MODE, 0x6A);
+
+
+// ---------------- BLE ----------------
+
+BLEService robotService("19B10000-E8F2-537E-4F6C-D104768A1214");
+
+BLECharacteristic commandCharacteristic(
+  "19B10001-E8F2-537E-4F6C-D104768A1214",
+  BLERead | BLENotify,
+  1
+);
+
+
+// ---------------- Settings ----------------
+
+const float threshold = 0.65;
+
+
+// Last command sent
+
+char lastCommand = 'S';
+
+
+// ---------------- Error blink (used instead of while(1); so you can see failures without a monitor) ----------------
+
+void errorBlink(int blinkDelay) {
+  while (1) {
+    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+    delay(blinkDelay);
+  }
+}
+
+
+// ---------------- Send BLE Command ----------------
+
+void sendCommand(char command) {
+
+  if (command == lastCommand)
+    return;
+
+  lastCommand = command;
+
+  commandCharacteristic.writeValue(
+    (const uint8_t*)&command,
+    1
+  );
+
+  if (Serial) {
+    Serial.print("Sent: ");
+    Serial.println(command);
+  }
+
+}
+
+
+// ---------------- Setup ----------------
+
+void setup() {
+
+  pinMode(LED_BUILTIN, OUTPUT);
+
+  Serial.begin(115200);
+
+  // while (!Serial);   // keep commented for power bank use
+
+
+  // Start IMU
+
+  if (myIMU.begin() != 0) {
+
+    if (Serial) Serial.println("IMU failed!");
+
+    errorBlink(150); // fast blink = IMU failed
+
+  }
+
+  if (Serial) Serial.println("LSM6DS3 Ready");
+
+
+  // Start BLE
+
+  if (!BLE.begin()) {
+
+    if (Serial) Serial.println("BLE failed!");
+
+    errorBlink(500); // slow blink = BLE failed
+
+  }
+
+
+  BLE.setLocalName("XIAO_Robot_Controller");
+  BLE.setAdvertisedService(robotService);
+
+  robotService.addCharacteristic(commandCharacteristic);
+  BLE.addService(robotService);
+
+  commandCharacteristic.writeValue(
+    (const uint8_t*)"S",
+    1
+  );
+
+  BLE.advertise();
+
+  if (Serial) Serial.println("BLE Advertising");
+
+}
+
+
+// ---------------- Loop ----------------
+
+void loop() {
+
+  BLE.poll();
+
+  float x = myIMU.readFloatAccelX();
+  float y = myIMU.readFloatAccelY();
+
+  char command = 'S';
+  // Forward / Backward
+  if (x < -threshold) {
+    command = 'F';
+  }
+  else if (x > threshold) {
+    command = 'B';
+  }
+  // Left / Right
+  else if (y < -threshold) {
+    command = 'L';
+  }
+  else if (y > threshold) {
+    command = 'R';
+  }
+
+  sendCommand(command);
+
+  delay(50);
+
+}
+```
+
+
+
 
 # Bill of Materials
 Here's where you'll list the parts in your project. To add more rows, just copy and paste the example rows below.
