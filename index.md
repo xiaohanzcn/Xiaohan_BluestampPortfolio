@@ -41,7 +41,7 @@ For your second milestone, explain what you've worked on since your previous mil
 - Previous challenges you faced that you overcame
 - What needs to be completed before your final milestone
 
-Since my previous milestone, I have shifted my focus mainly on the glove component of my project. This involved an abunduance of wiring the Arduino Nano to the the IMU mpu6050, which is a sensor that detects and tracks motion, forces, and rotational changes. This sensor plays a key role in the project because it will sense the changes in motion as I move it (and the glove it's going to be on) in four different directions and then using the x, y, and z-axis to identify which direction is which. I have also edited the code so that it only identifies a certain direction is initialized once the change in the axises goes over a certain, reasonable amount so as to not make the the robot too sensitive when connected. 
+Since my previous milestone, I have shifted my focus mainly on the glove component of my project. This involved an abundance of wiring the Arduino Nano to the the IMU mpu6050, which is a sensor that can detect and track acceleration (accelerometer), angular velocity (gyroscope), and even temperature). This sensor plays a key role in the project because it will track the rotation of my glove component by tracking the acceleration using the accelerometer. When the IMU is flat, it only feels the gravity of the earth (which is 9.8 m/s^2) and it sets that as a "base value" of 1 (The acceleration in the z-axis is 0 here). When the glove and IMU is tilted, the acceleration it feels changes. Using this, the IMU creates vectors in different axes and is then able to calculate the degree/extent of rotation using the inverse tangent function. Subsequently, I have edited the code so that it only identifies a certain direction is initialized once the change in the axis goes over a certain, reasonable amount so as to not make the the robot too sensitive when connected. After that I decided to setup the HC-05 Bluetooth Module, but I was unable to establish connections between the modules because (as I later found out after debugging the problem by changing setup to see the source of the problem) one of the modules was short circuited. While I was waiting for a new module to arrive, I was instead able to find another component that worked better than my original setup: a XIAO-NRF52840 Seeed Studio chip. Essentially it has an Arduino, IMU, and a Bluetooth built in, making the overall setup for my glove extremely simple. I also switched the Bluetooth module and Arduino Uno on my robot for an Arduino Nano ESP32 (has built in Bluetooth) for similar reasons. I thought this switch in setup would change the code I have already written for both Arduinos, but I was surprised to find that the general code for the robot (AKA the 4 functions for each direction and their calling) is essentially similar. I was even more surprised by how complicated the Bluetooth setup between the XIAO and the Arduino Nano ESP32 is as it required commands that took up a significant portion of the overall code. This was where I overcame the problem of the Bluetooth connection I faced before and the reason why I wasn't able to include the setup of the receiver Bluetooth module in my milestone 1. Before my final milestone, I still need to actually find something resembling a glove or can allow the Xiao to rest on top of my hand as well as tape everything down so it doesn't move during travel. In addition I would like to implement some modifications which include making the speed at which the robot goes at vary depending on the level of tilt, as well as add an ultrasonic sensor so that the robot doesn't crash into objects in front of it.
 
 # First Milestone
 
@@ -55,297 +55,13 @@ For your first milestone, describe what your project is and how you plan to buil
 - Challenges you're facing and solving in your future milestones
 - What your plan is to complete your project
 
-My project is a gesture controlled robot, which is where a glove on one hand will be able to control a robot car using sensors that detect certains motions and sent accordingly to the robot via bluetooth. My plan to build this project is to first split into 3 different parts: the robot, the glove, and the last part will be any assembly of the parts together or final code. First, the robot is a car with 4 motors to turn the wheels accordingly and the amount of power that cause the car to change directions will be determined by a motordriver that they are wired to. The motordriver determines the amount of power (which comes from an installed battery pack) goes to which motor. This information about direction and power output comes from an Arduino UNO, a computer that acts as the decision processor that has code that will be able to determine 4 different directions (forward, backward, left, and right). The information of which direction the Arduino UNO should make the robot actually turn comes from a bluetooth module that recieves information from another one on the glove. Since this robot is controlled through the motion of my hand, a sensor on the glove detects an intended motion on my hand and is then processed by the code on an Arduno Nano that sends the information to the robot. So far I have been able to build the robot by soldering the wiring beween the motors and the motordriver and connecting it to an Arduino. I was also able to write basic code that allows the robot to move in the four directions, meaning the robot is able to function and move. I have faced several challenges with most of them summing up to the wheels turning in ways that I don't intend it to. This showed in the forms of either soldering wires on the motors incorrectly, connecting the wires incorrectly to the motordriver, and even my code with wrong instructions for each direction. Challenges I am facing and solving in future milestones include actually writing the code to connect the glove component to the robot component via bluetooth as I have had almost negligible experience coding with python and C++ and none at all in Arduino IDE, requiring me to learn how this new coding environment works. My plan to complete the project is to next work on the glove, installing an Arduino Nano, Inertial measurement unit, and bluetooth module to send information and connecting it all together. I also plan to code the glove to recognize motion for intended direction of the robot and send it as such. Later I plan to connect the 2 code and add finishing touches as well as modifications to complete my project.
+My project is a gesture controlled robot, which is where a glove on one hand will be able to control a robot car using sensors that detect certain motions and sent accordingly to the robot via Bluetooth. My plan to build this project is to first split into 3 different parts: the robot, the glove, and the last part will be any assembly of the parts together or final code. First, the robot is a car with 4 motors to turn the wheels accordingly and the amount of power that cause the car to change directions will be determined by a motordriver that they are wired to. The motordriver determines the amount of power (which comes from an installed battery pack) goes to which motor. This information about direction and power output comes from an Arduino UNO, a computer that acts as the decision processor that has code that will be able to determine 4 different directions (forward, backward, left, and right). The information of which direction the Arduino UNO should make the robot actually turn comes from a Bluetooth module that receives information from another one on the glove. Since this robot is controlled through the motion of my hand, a sensor on the glove detects an intended motion on my hand and is then processed by the code on an Arduino Nano that sends the information to the robot. So far I have been able to build the robot by soldering the wiring between the motors and the motordriver and connecting it to an Arduino. I was also able to write basic code that allows the robot to move in the four directions, meaning the robot is able to function and move. I have faced several challenges with most of them summing up to the wheels turning in ways that I don't intend it to. This showed in the forms of either soldering wires on the motors incorrectly, connecting the wires incorrectly to the motordriver, and even my code with wrong instructions for each direction. Challenges I am facing and solving in future milestones include actually writing the code to connect the glove component to the robot component via Bluetooth as I have had almost negligible experience coding with python and C++ and none at all in Arduino IDE, requiring me to learn how this new coding environment works. My plan to complete the project is to next work on the glove, installing an Arduino Nano, Inertial measurement unit, and Bluetooth module to send information and connecting it all together. I also plan to code the glove to recognize motion for intended direction of the robot and send it as such. Later I plan to connect the 2 code and add finishing touches as well as modifications to complete my project.
 
 # Schematics 
 Here's where you'll put images of your schematics. [Tinkercad](https://www.tinkercad.com/blog/official-guide-to-tinkercad-circuits) and [Fritzing](https://fritzing.org/learning/) are both great resoruces to create professional schematic diagrams, though BSE recommends Tinkercad becuase it can be done easily and for free in the browser. 
 
 # Code
 Here's where you'll put your code. The syntax below places it into a block of code. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize it to your project needs. 
-
-```c++
-#include <BLEDevice.h>
-#include <BLEUtils.h>
-#include <BLEClient.h>
-
-
-#define SERVICE_UUID        "19B10000-E8F2-537E-4F6C-D104768A1214"
-#define CHARACTERISTIC_UUID "19B10001-E8F2-537E-4F6C-D104768A1214"
-
-
-// -------- L298N MOTOR PINS --------
-
-int IN1 = 9;
-int IN2 = 8;
-int IN3 = 7;
-int IN4 = 6;
-
-int ENA = 12;
-int ENB = 10;
-
-
-// -------- BLE VARIABLES --------
-
-BLEClient* client;
-BLERemoteCharacteristic* characteristic;
-
-bool connected = false;
-
-char lastCommand = 'S';
-
-
-// -------- MOTOR FUNCTIONS --------
-
-void forward() {
-
-  digitalWrite(IN1, HIGH);
-  digitalWrite(IN2, LOW);
-
-  digitalWrite(IN3, LOW);
-  digitalWrite(IN4, HIGH);
-
-}
-
-
-void backward() {
-
-  digitalWrite(IN1, LOW);
-  digitalWrite(IN2, HIGH);
-
-  digitalWrite(IN3, HIGH);
-  digitalWrite(IN4, LOW);
-
-}
-
-
-void left() {
-
-  digitalWrite(IN1, LOW);
-  digitalWrite(IN2, HIGH);
-
-  digitalWrite(IN3, LOW);
-  digitalWrite(IN4, HIGH);
-
-}
-
-
-void right() {
-
-  digitalWrite(IN1, HIGH);
-  digitalWrite(IN2, LOW);
-
-  digitalWrite(IN3, HIGH);
-  digitalWrite(IN4, LOW);
-
-}
-
-
-void stopMotors() {
-
-  digitalWrite(IN1, LOW);
-  digitalWrite(IN2, LOW);
-
-  digitalWrite(IN3, LOW);
-  digitalWrite(IN4, LOW);
-
-}
-
-
-
-// -------- BLE RECEIVE --------
-
-void notifyCallback(
-  BLERemoteCharacteristic* characteristic,
-  uint8_t* data,
-  size_t length,
-  bool isNotify
-) {
-
-
-  if (length > 0) {
-
-
-    char command = (char)data[0];
-
-
-    if (command != lastCommand) {
-
-
-      lastCommand = command;
-
-
-      Serial.print("Command received: ");
-      Serial.println(command);
-
-
-
-      switch(command) {
-
-
-        case 'F':
-          forward();
-          break;
-
-
-        case 'B':
-          backward();
-          break;
-
-
-        case 'L':
-          left();
-          break;
-
-
-        case 'R':
-          right();
-          break;
-
-
-        case 'S':
-          stopMotors();
-          break;
-
-      }
-
-    }
-
-  }
-
-}
-
-
-
-// -------- SETUP --------
-
-void setup() {
-
-
-  Serial.begin(115200);
-
-
-  // Motor pins
-  pinMode(IN1, OUTPUT);
-  pinMode(IN2, OUTPUT);
-
-  pinMode(IN3, OUTPUT);
-  pinMode(IN4, OUTPUT);
-
-  pinMode(ENA, OUTPUT);
-  pinMode(ENB, OUTPUT);
-
-
-  // Full speed
-  analogWrite(ENA, 255);
-  analogWrite(ENB, 255);
-
-
-  stopMotors();
-
-
-
-  Serial.println("Starting BLE");
-
-
-  BLEDevice::init("Nano Robot");
-
-
-}
-
-
-
-// -------- LOOP --------
-
-void loop() {
-
-  if (!connected) {
-
-
-    Serial.println("Scanning...");
-
-
-    BLEScan* scan = BLEDevice::getScan();
-
-    scan->setActiveScan(true);
-
-
-    BLEScanResults results = scan->start(5);
-
-
-
-    for (int i = 0; i < results.getCount(); i++) {
-
-
-      BLEAdvertisedDevice device =
-      results.getDevice(i);
-
-
-
-      if (device.haveServiceUUID() &&
-          device.isAdvertisingService(
-            BLEUUID(SERVICE_UUID)
-          )) {
-
-
-        Serial.println("Found XIAO");
-
-
-        client = BLEDevice::createClient();
-
-
-
-        if (client->connect(&device)) {
-
-
-          Serial.println("Connected to XIAO");
-
-
-
-          BLERemoteService* service =
-          client->getService(
-            BLEUUID(SERVICE_UUID)
-          );
-
-
-
-          characteristic =
-          service->getCharacteristic(
-            BLEUUID(CHARACTERISTIC_UUID)
-          );
-
-
-
-          if (characteristic->canNotify()) {
-
-
-            characteristic->registerForNotify(
-              notifyCallback
-            );
-
-
-            Serial.println("Notifications enabled");
-
-
-          }
-
-
-          connected = true;
-
-
-        }
-
-      }
-
-    }
-
-  }
-
-
-  delay(1000);
-
-}
-
-```
 
 ```c++
 #include <ArduinoBLE.h>
@@ -371,7 +87,13 @@ BLECharacteristic commandCharacteristic(
 
 // ---------------- Settings ----------------
 
-const float threshold = 0.65;
+// Forward / backward speed levels
+const float level1Threshold = 0.50;   // Slow
+const float level2Threshold = 0.75;   // Medium
+const float level3Threshold = 1.00;   // Fast
+
+// Turning threshold (higher because turns are full speed)
+const float turnThreshold = 0.65;
 
 
 // Last command sent
@@ -379,13 +101,30 @@ const float threshold = 0.65;
 char lastCommand = 'S';
 
 
-// ---------------- Error blink (used instead of while(1); so you can see failures without a monitor) ----------------
+// ---------------- Error blink ----------------
 
 void errorBlink(int blinkDelay) {
+
   while (1) {
+
     digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+
     delay(blinkDelay);
+
   }
+
+}
+
+// ---------------- Speed level helper ----------------
+
+char getSpeedLevel(float magnitude) {
+
+  if (magnitude >= level3Threshold) return '3';
+  if (magnitude >= level2Threshold) return '2';
+  if (magnitude >= level1Threshold) return '1';
+
+  return 0;
+
 }
 
 
@@ -393,105 +132,472 @@ void errorBlink(int blinkDelay) {
 
 void sendCommand(char command) {
 
-  if (command == lastCommand)
+
+  if(command == lastCommand)
     return;
 
+
   lastCommand = command;
+
 
   commandCharacteristic.writeValue(
     (const uint8_t*)&command,
     1
   );
 
-  if (Serial) {
+
+  if(Serial) {
+
     Serial.print("Sent: ");
     Serial.println(command);
+
   }
 
 }
+
 
 
 // ---------------- Setup ----------------
 
 void setup() {
 
+
   pinMode(LED_BUILTIN, OUTPUT);
 
-  Serial.begin(115200);
 
-  // while (!Serial);   // keep commented for power bank use
+  Serial.begin(115200);
 
 
   // Start IMU
 
-  if (myIMU.begin() != 0) {
+  if(myIMU.begin() != 0) {
 
-    if (Serial) Serial.println("IMU failed!");
 
-    errorBlink(150); // fast blink = IMU failed
+    if(Serial)
+      Serial.println("IMU failed!");
+
+
+    errorBlink(150);
 
   }
 
-  if (Serial) Serial.println("LSM6DS3 Ready");
+
+  if(Serial)
+    Serial.println("LSM6DS3 Ready");
+
 
 
   // Start BLE
 
-  if (!BLE.begin()) {
+  if(!BLE.begin()) {
 
-    if (Serial) Serial.println("BLE failed!");
 
-    errorBlink(500); // slow blink = BLE failed
+    if(Serial)
+      Serial.println("BLE failed!");
+
+
+    errorBlink(500);
 
   }
 
 
+
   BLE.setLocalName("XIAO_Robot_Controller");
+
   BLE.setAdvertisedService(robotService);
 
-  robotService.addCharacteristic(commandCharacteristic);
+
+
+  robotService.addCharacteristic(
+    commandCharacteristic
+  );
+
+
   BLE.addService(robotService);
+
+
 
   commandCharacteristic.writeValue(
     (const uint8_t*)"S",
     1
   );
 
+
+
   BLE.advertise();
 
-  if (Serial) Serial.println("BLE Advertising");
+
+
+  if(Serial)
+    Serial.println("BLE Advertising");
+
 
 }
+
 
 
 // ---------------- Loop ----------------
 
 void loop() {
 
+
   BLE.poll();
 
+
+
   float x = myIMU.readFloatAccelX();
+
   float y = myIMU.readFloatAccelY();
 
+
+
   char command = 'S';
-  // Forward / Backward
-  if (x < -threshold) {
-    command = 'F';
-  }
-  else if (x > threshold) {
-    command = 'B';
-  }
-  // Left / Right
-  else if (y < -threshold) {
+
+
+
+  // -------- Forward / Backward --------
+
+  // -------- Forward / Backward (3 speeds) --------
+
+if (x < 0) {
+
+  char level = getSpeedLevel(-x);
+
+  if (level != 0)
+    command = level;          // '1','2','3'
+
+}
+else if (x > 0) {
+
+  char level = getSpeedLevel(x);
+
+  if (level != 0)
+    command = 'a' + (level - '1');   // 'a','b','c'
+
+}
+
+// -------- Left / Right (single speed) --------
+
+
+  //Serial.println(y);
+  if (y < -turnThreshold) {
     command = 'L';
+  
   }
-  else if (y > threshold) {
+  else if (y > turnThreshold) {
     command = 'R';
   }
 
+
   sendCommand(command);
 
+
+
   delay(50);
+
+}
+```
+
+```c++
+#include <BLEDevice.h>
+#include <BLEUtils.h>
+#include <BLEClient.h>
+
+
+#define SERVICE_UUID        "19B10000-E8F2-537E-4F6C-D104768A1214"
+#define CHARACTERISTIC_UUID "19B10001-E8F2-537E-4F6C-D104768A1214"
+
+
+// -------- L298N MOTOR PINS --------
+
+int IN1 = 9;
+int IN2 = 8;
+int IN3 = 7;
+int IN4 = 6;
+
+int ENA = 12;
+int ENB = 10;
+
+
+// -------- SPEED SETTINGS --------
+
+const int FAST_SPEED = 255; // used for turns now, and as level 5
+
+// 5 forward/backward speed levels — index 0 = gentlest tilt, index 4 = strongest
+const int SPEED_LEVELS[3] = {80, 160, 255};
+
+
+// -------- ULTRASONIC (HC-SR04) --------
+// Echo is 5V logic — run it through a voltage divider before this pin!
+
+const int TRIG_PIN = 2;
+const int ECHO_PIN = 3;
+
+const int OBSTACLE_DISTANCE_CM = 7; // stop threshold — small buffer, tune as needed
+const unsigned long OBSTACLE_CHECK_INTERVAL = 50; // ms between re-checks while driving forward
+
+unsigned long lastObstacleCheck = 0;
+
+
+// -------- BLE VARIABLES --------
+
+BLEClient* client = nullptr;
+BLERemoteCharacteristic* characteristic;
+
+bool connected = false;
+
+char lastCommand = 'S';
+
+
+// -------- CLIENT CONNECTION CALLBACKS --------
+
+class MyClientCallback : public BLEClientCallbacks {
+
+  void onConnect(BLEClient* pclient) {
+  }
+
+  void onDisconnect(BLEClient* pclient) {
+    connected = false;
+    Serial.println("Disconnected from XIAO - will rescan");
+  }
+
+};
+
+
+// -------- ULTRASONIC FUNCTIONS --------
+
+long getDistanceCm() {
+
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+
+  long duration = pulseIn(ECHO_PIN, HIGH, 30000); // 30ms timeout
+
+  if (duration == 0) return 999; // no echo = nothing in range, treat as clear
+
+  return duration * 0.0343 / 2;
+
+}
+
+
+// -------- MOTOR FUNCTIONS --------
+
+void forward(int speed) {
+  analogWrite(ENA, speed);
+  analogWrite(ENB, speed);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+}
+
+void backward(int speed) {
+  analogWrite(ENA, speed);
+  analogWrite(ENB, speed);
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+}
+
+// Turns — full pivot, both wheels equal and opposite, always full speed
+void left(int speed) {
+  analogWrite(ENA, speed);
+  analogWrite(ENB, speed);
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+}
+
+void right(int speed) {
+  analogWrite(ENA, speed);
+  analogWrite(ENB, speed);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+}
+
+void stopMotors() {
+  analogWrite(ENA, 0);
+  analogWrite(ENB, 0);
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+}
+
+
+// -------- CENTRAL MOTOR DISPATCH (obstacle-aware) --------
+
+void updateMotors() {
+
+  // Forward — 5 speed levels ('1'-'5'), obstacle-checked
+  if (lastCommand >= '1' && lastCommand <= '3') {
+
+    int speed = SPEED_LEVELS[lastCommand - '1'];
+
+    if (getDistanceCm() <= OBSTACLE_DISTANCE_CM) {
+      stopMotors();
+    } else {
+      forward(speed);
+    }
+
+    return;
+
+  }
+
+  // Backward — 5 speed levels ('a'-'e'), never blocked by the front sensor
+  if (lastCommand >= 'a' && lastCommand <= 'c') {
+
+    int speed = SPEED_LEVELS[lastCommand - 'a'];
+    backward(speed);
+    return;
+
+  }
+
+  switch (lastCommand) {
+
+    case 'L':
+      left(FAST_SPEED);
+      break;
+
+    case 'R':
+      right(FAST_SPEED);
+      break;
+
+    case 'S':
+      stopMotors();
+      break;
+
+  }
+
+}
+
+
+// -------- BLE RECEIVE --------
+
+void notifyCallback(
+  BLERemoteCharacteristic* characteristic,
+  uint8_t* data,
+  size_t length,
+  bool isNotify
+) {
+
+  if (length > 0) {
+
+    char command = (char)data[0];
+
+    if (command != lastCommand) {
+
+      lastCommand = command;
+
+      Serial.print("Command received: ");
+      Serial.println(command);
+
+      updateMotors();
+
+    }
+
+  }
+
+}
+
+
+// -------- SETUP --------
+
+void setup() {
+
+  Serial.begin(115200);
+
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+
+  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
+
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+
+  stopMotors();
+
+  Serial.println("Starting BLE");
+
+  BLEDevice::init("Nano Robot");
+
+}
+
+
+// -------- LOOP --------
+
+void loop() {
+
+  if (!connected) {
+
+    Serial.println("Scanning...");
+
+    BLEScan* scan = BLEDevice::getScan();
+    scan->setActiveScan(true);
+
+    BLEScanResults results = scan->start(5);
+
+    for (int i = 0; i < results.getCount(); i++) {
+
+      BLEAdvertisedDevice device = results.getDevice(i);
+
+      if (device.haveServiceUUID() &&
+          device.isAdvertisingService(BLEUUID(SERVICE_UUID))) {
+
+        Serial.println("Found XIAO");
+
+        if (client == nullptr) {
+          client = BLEDevice::createClient();
+          client->setClientCallbacks(new MyClientCallback());
+        }
+
+        if (client->connect(&device)) {
+
+          Serial.println("Connected to XIAO");
+
+          BLERemoteService* service = client->getService(BLEUUID(SERVICE_UUID));
+          characteristic = service->getCharacteristic(BLEUUID(CHARACTERISTIC_UUID));
+
+          if (characteristic->canNotify()) {
+            characteristic->registerForNotify(notifyCallback);
+            Serial.println("Notifications enabled");
+          }
+
+          connected = true;
+
+        }
+
+      }
+
+    }
+
+    delay(1000);
+
+  } else {
+
+    unsigned long now = millis();
+
+    if (now - lastObstacleCheck >= OBSTACLE_CHECK_INTERVAL) {
+      lastObstacleCheck = now;
+
+      if (lastCommand >= '1' && lastCommand <= '3') {
+        updateMotors();
+      }
+    }
+
+    delay(10);
+
+  }
 
 }
 ```
@@ -505,7 +611,7 @@ Don't forget to place the link of where to buy each component inside the quotati
 
 | **Part** | **Note** | **Price** | **Link** |
 |:--:|:--:|:--:|:--:|
-| Item Name | What the item is used for | $Price | <a href="https://www.amazon.com/Arduino-A000066-ARDUINO-UNO-R3/dp/B008GRTSV6/"> Link </a> |
+| Arduino Nano ESP32-S3| The main computer component of the robot that receives information and  | $19.3 | <a href="https://www.amazon.com/Arduino-ABX00083-Bluetooth-MicroPython-Compatible/dp/B0C947BHK5/"> Link </a> |
 | Item Name | What the item is used for | $Price | <a href="https://www.amazon.com/Arduino-A000066-ARDUINO-UNO-R3/dp/B008GRTSV6/"> Link </a> |
 | Item Name | What the item is used for | $Price | <a href="https://www.amazon.com/Arduino-A000066-ARDUINO-UNO-R3/dp/B008GRTSV6/"> Link </a> |
 
