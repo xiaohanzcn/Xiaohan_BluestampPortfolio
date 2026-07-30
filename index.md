@@ -612,8 +612,15 @@ Don't forget to place the link of where to buy each component inside the quotati
 | **Part** | **Note** | **Price** | **Link** |
 |:--:|:--:|:--:|:--:|
 | Arduino Nano ESP32-S3| The main computer component of the robot that receives information and  | $19.3 | <a href="https://www.amazon.com/Arduino-ABX00083-Bluetooth-MicroPython-Compatible/dp/B0C947BHK5/"> Link </a> |
-| Item Name | What the item is used for | $Price | <a href="https://www.amazon.com/Arduino-A000066-ARDUINO-UNO-R3/dp/B008GRTSV6/"> Link </a> |
-| Item Name | What the item is used for | $Price | <a href="https://www.amazon.com/Arduino-A000066-ARDUINO-UNO-R3/dp/B008GRTSV6/"> Link </a> |
+| XIAO nRF52840 | To detect correct motion on the glove and send direction information to the robot | $16.99 | <a href="https://www.amazon.com/Seeed-Studio-XIAO-nRF52840-Microcontroller/dp/B09T9VVQG7/"> Link </a> |
+| L298n Motor Drive controller | Able to control current so to move the motors | $6.99 | <a href="https://www.amazon.com/Qunqi-Controller-Module-Stepper-Arduino/dp/B014KMHSW6/"> Link </a> |
+| Ultrasonic Sensor HC - SRO4 | Sends out soundwaves to detect obstacles in it's way | $5.25 | <a href="https://www.amazon.com/HC-SR04-Ranging-Detector-Ultrasonic-Distance/dp/B01GNEHJNC/"> Link </a> |
+|4WD Robot Car Chassis Kit  | Includes a base plate as well as the motors and wheels used for the basis of the project | $20.99 | <a href="https://www.amazon.com/4WD-Robot-Chassis-Robotics-Raspberry/dp/B0G5N8P9YF/"> Link </a> |
+| Sparthos Glove | The base for the glove component so that the chip has a place to rest | $9.99 | <a href="https://www.amazon.com/Sparthos-Wrist-Support-Sleeves-Pair/dp/B074CXHF4T/"> Link </a> |
+| Miady 2-Pack Portable Charger | Powers the glove component | $17.99 | <a href="https://www.amazon.com/Miady-Portable-Charger-10000mAh-Battery/dp/B0GQH1QHDH/"> Link </a> |
+| AA 9V battery holder | Holds batteries on the robot, only 1 is needed| $7.99 | <a href="https://www.amazon.com/LAMPVPATH-Pack-Battery-Holder-Leads/dp/B07KVJ9FPN/"> Link </a> |
+| AA 9V batteries | Powers the robot, 6 are needed| $6.49 | <a href="https://www.amazon.com/AmazonBasics-Performance-Alkaline-Batteries-8-Pack/dp/B00O869KJE/"> Link </a> |
+
 
 # Other Resources/Examples
 One of the best parts about Github is that you can view how other people set up their own work. Here are some past BSE portfolios that are awesome examples. You can view how they set up their portfolio, and you can view their index.md files to understand how they implemented different portfolio components.
