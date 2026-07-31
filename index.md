@@ -15,7 +15,8 @@ You should comment out all portions of your portfolio that you have not complete
 
 **Replace the BlueStamp logo below with an image of yourself and your completed project. Follow the guide [here](https://tomcam.github.io/least-github-pages/adding-images-github-pages-site.html) if you need help.**
 
-![Headstone Image](logo.svg)
+<img width="500" height="500" alt="IMG_2945" src="https://github.com/user-attachments/assets/3e414bcb-5a9c-4d36-ad6d-a2f7c3d57178" />
+
   
 # Final Milestone
 
@@ -68,7 +69,7 @@ My project is a gesture controlled robot, which is where a glove on one hand wil
 
 # Code
 Here's where you'll put your code. The syntax below places it into a block of code. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize it to your project needs. 
-
+Glove code/xiao code:
 ```c++
 #include <ArduinoBLE.h>
 #include <Wire.h>
@@ -304,6 +305,7 @@ else if (x > 0) {
 }
 ```
 
+Robot car code/arduino nano esp32 code
 ```c++
 #include <BLEDevice.h>
 #include <BLEUtils.h>
