@@ -1,26 +1,18 @@
 # Gesture Controlled Robot
-Replace this text with a brief description (2-3 sentences) of your project. This description should draw the reader in and make them interested in what you've built. You can include what the biggest challenges, takeaways, and triumphs from completing the project were. As you complete your portfolio, remember your audience is less familiar than you are with all that your project entails!
 
 My project, the Gesture Controlled Robot, is a robot car that can be moved simply by waving one's hand while wearing a custom-made component. Through constant coding and debugging, shifting the wiring of different components, and even changing the overall design multiple times, I was able to combine a motion sensing chip that detects the amount of tilt through sensing its acceleration when it rotates with 4-wheeled robot by sending information from one computer to another using Bluetooth. This endeavor was filled with frustration from challenges ranging from the robot moving incorrectly to the short circuit of several components but also triumph as I eventually arrived a working product and even went beyond with additional features for varying speed and anti-obstacle collision.
 
-You should comment out all portions of your portfolio that you have not completed yet, as well as any instructions:
-```HTML 
-<!--- This is an HTML comment in Markdown -->
-<!--- Anything between these symbols will not render on the published site -->
-```
 
 | **Engineer** | **School** | **Area of Interest** | **Grade** |
 |:--:|:--:|:--:|:--:|
 | Xiaohan Z | Dougherty Valley High School | Mechanical Engineering | Incoming Junior
 
-**Replace the BlueStamp logo below with an image of yourself and your completed project. Follow the guide [here](https://tomcam.github.io/least-github-pages/adding-images-github-pages-site.html) if you need help.**
 
 <img width="450" height="500" alt="IMG_2945" src="https://github.com/user-attachments/assets/3e414bcb-5a9c-4d36-ad6d-a2f7c3d57178" />
 
   
 # Final Milestone
 
-**Don't forget to replace the text below with the embedding for your milestone video. Go to Youtube, click Share -> Embed, and copy and paste the code to replace what's below.**
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/F7M7imOVGug" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
@@ -38,29 +30,18 @@ Following my prior milestone, I was able to finalize the project through ensurin
 
 # Second Milestone
 
-**Don't forget to replace the text below with the embedding for your milestone video. Go to Youtube, click Share -> Embed, and copy and paste the code to replace what's below.**
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/iUUz3c4Hcvg?si=-KV3AcNENHIhCIRa" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-For your second milestone, explain what you've worked on since your previous milestone. You can highlight:
-- Technical details of what you've accomplished and how they contribute to the final goal
-- What has been surprising about the project so far
-- Previous challenges you faced that you overcame
-- What needs to be completed before your final milestone
 
 Since my previous milestone, I have shifted my focus mainly on the glove component of my project. This involved an abundance of wiring the Arduino Nano to the the IMU mpu6050, which is a sensor that can detect and track acceleration (accelerometer), angular velocity (gyroscope), and even temperature). This sensor plays a key role in the project because it will track the rotation of my glove component by tracking the acceleration using the accelerometer. When the IMU is flat, it only feels the gravity of the earth (which is 9.8 m/s^2) and it sets that as a "base value" of 1 (The acceleration in the z-axis is 0 here). When the glove and IMU is tilted, the acceleration it feels changes. Using this, the IMU creates vectors in different axes and is then able to calculate the degree/extent of rotation using the inverse tangent function. Subsequently, I have edited the code so that it only identifies a certain direction is initialized once the change in the axis goes over a certain, reasonable amount so as to not make the the robot too sensitive when connected. After that I decided to setup the HC-05 Bluetooth Module, but I was unable to establish connections between the modules because (as I later found out after debugging the problem by changing setup to see the source of the problem) one of the modules was short circuited. While I was waiting for a new module to arrive, I was instead able to find another component that worked better than my original setup: a XIAO-NRF52840 Seeed Studio chip. Essentially it has an Arduino, IMU, and a Bluetooth built in, making the overall setup for my glove extremely simple. I also switched the Bluetooth module and Arduino Uno on my robot for an Arduino Nano ESP32 (has built in Bluetooth) for similar reasons. I thought this switch in setup would change the code I have already written for both Arduinos, but I was surprised to find that the general code for the robot (AKA the 4 functions for each direction and their calling) is essentially similar. I was even more surprised by how complicated the Bluetooth setup between the XIAO and the Arduino Nano ESP32 is as it required commands that took up a significant portion of the overall code. This was where I overcame the problem of the Bluetooth connection I faced before and the reason why I wasn't able to include the setup of the receiver Bluetooth module in my milestone 1. Before my final milestone, I still need to actually find something resembling a glove or can allow the Xiao to rest on top of my hand as well as tape everything down so it doesn't move during travel. In addition I would like to implement some modifications which include making the speed at which the robot goes at vary depending on the level of tilt, as well as add an ultrasonic sensor so that the robot doesn't crash into objects in front of it.
 
 # First Milestone
 
-**Don't forget to replace the text below with the embedding for your milestone video. Go to Youtube, click Share -> Embed, and copy and paste the code to replace what's below.**
+
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/KC9W6fl12bc?si=12MsDaF2m3Opu-4w" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-For your first milestone, describe what your project is and how you plan to build it. You can include:
-- An explanation about the different components of your project and how they will all integrate together
-- Technical progress you've made so far
-- Challenges you're facing and solving in your future milestones
-- What your plan is to complete your project
 
 My project is a gesture controlled robot, which is where a glove on one hand will be able to control a robot car using sensors that detect certain motions and sent accordingly to the robot via Bluetooth. My plan to build this project is to first split into 3 different parts: the robot, the glove, and the last part will be any assembly of the parts together or final code. First, the robot is a car with 4 motors to turn the wheels accordingly and the amount of power that cause the car to change directions will be determined by a motordriver that they are wired to. The motordriver determines the amount of power (which comes from an installed battery pack) goes to which motor. This information about direction and power output comes from an Arduino UNO, a computer that acts as the decision processor that has code that will be able to determine 4 different directions (forward, backward, left, and right). The information of which direction the Arduino UNO should make the robot actually turn comes from a Bluetooth module that receives information from another one on the glove. Since this robot is controlled through the motion of my hand, a sensor on the glove detects an intended motion on my hand and is then processed by the code on an Arduino Nano that sends the information to the robot. So far I have been able to build the robot by soldering the wiring between the motors and the motordriver and connecting it to an Arduino. I was also able to write basic code that allows the robot to move in the four directions, meaning the robot is able to function and move. I have faced several challenges with most of them summing up to the wheels turning in ways that I don't intend it to. This showed in the forms of either soldering wires on the motors incorrectly, connecting the wires incorrectly to the motordriver, and even my code with wrong instructions for each direction. Challenges I am facing and solving in future milestones include actually writing the code to connect the glove component to the robot component via Bluetooth as I have had almost negligible experience coding with python and C++ and none at all in Arduino IDE, requiring me to learn how this new coding environment works. My plan to complete the project is to next work on the glove, installing an Arduino Nano, Inertial measurement unit, and Bluetooth module to send information and connecting it all together. I also plan to code the glove to recognize motion for intended direction of the robot and send it as such. Later I plan to connect the 2 code and add finishing touches as well as modifications to complete my project.
 
@@ -68,7 +49,6 @@ My project is a gesture controlled robot, which is where a glove on one hand wil
 <img width="350" height="350" alt="circuit_image" src="https://github.com/user-attachments/assets/40bcaca4-e4ac-48b0-bb8d-ac8ec36b9f38" />
 
 # Code
-Here's where you'll put your code. The syntax below places it into a block of code. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize it to your project needs. 
 Glove code/xiao code:
 ```c++
 #include <ArduinoBLE.h>
@@ -614,8 +594,6 @@ void loop() {
 
 
 # Bill of Materials
-Here's where you'll list the parts in your project. To add more rows, just copy and paste the example rows below.
-Don't forget to place the link of where to buy each component inside the quotation marks in the corresponding row after href =. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize this to your project needs. 
 
 | **Part** | **Note** | **Price** | **Link** |
 |:--:|:--:|:--:|:--:|
@@ -630,10 +608,8 @@ Don't forget to place the link of where to buy each component inside the quotati
 | AA 9V batteries | Powers the robot, 6 are needed| $6.49 | <a href="https://www.amazon.com/AmazonBasics-Performance-Alkaline-Batteries-8-Pack/dp/B00O869KJE/"> Link </a> |
 
 
-# Other Resources/Examples
+# References
 One of the best parts about Github is that you can view how other people set up their own work. Here are some past BSE portfolios that are awesome examples. You can view how they set up their portfolio, and you can view their index.md files to understand how they implemented different portfolio components.
-- [Example 1](https://trashytuber.github.io/YimingJiaBlueStamp/)
-- [Example 2](https://sviatil0.github.io/Sviatoslav_BSE/)
-- [Example 3](https://arneshkumar.github.io/arneshbluestamp/)
+- [Example 1]([https://trashytuber.github.io/YimingJiaBlueStamp/](https://www.hackster.io/embeddedlab786/hand-gesture-control-robot-via-bluetooth-94b13d))
+- [Example 2](https://wiki.seeedstudio.com/XIAO_BLE/)
 
-To watch the BSE tutorial on how to create a portfolio, click here.
