@@ -604,7 +604,6 @@ void loop() {
 
 
 # References
-One of the best parts about Github is that you can view how other people set up their own work. Here are some past BSE portfolios that are awesome examples. You can view how they set up their portfolio, and you can view their index.md files to understand how they implemented different portfolio components.
-- [Example 1](https://www.hackster.io/embeddedlab786/hand-gesture-control-robot-via-bluetooth-94b13d)
-- [Example 2](https://wiki.seeedstudio.com/XIAO_BLE/)
+- [Gesture Controlled Robot base](https://www.hackster.io/embeddedlab786/hand-gesture-control-robot-via-bluetooth-94b13d)
+- [Uses of Xiao NRF52840](https://wiki.seeedstudio.com/XIAO_BLE/)
 
